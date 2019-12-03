@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'randtweet'
+require 'optparse'
+
+USAGE = <<END_OF_USAGE
+randtweet [-i|--init|-h|--help] [<dir>]
+  -i, --init    Generate config.yml in <dir>.
+  -h, --help    Show this usage and exit.
+  (no option)   Tweet a random line according to <dir>/config.yml.
+  Default <dir> path is current directory.
+END_OF_USAGE
+
+opts = ARGV.getopts("ih", "init", "help")
+init = opts["i"] || opts["init"]
+help = opts["h"] || opts["help"]
+dir = ARGV.empty? ? nil : ARGV[0]
+
+if help
+  STDERR.puts USAGE
+  exit 1
+end
+
+begin
+  if init
+    template = RandTweet::Config.create_template(dir)
+    puts "#{template} is generated."
+  else
+    config = RandTweet::Config.new(dir)
+    content = RandTweet.select_content(config)
+    RandTweet.tweet(config, content)
+    puts "Tweeted:"
+    puts content
+  end
+rescue => e
+  STDERR.puts e
+  STDERR.puts USAGE
+  exit 1
+end
