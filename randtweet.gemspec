@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["yamaimo"]
   spec.email         = ["hello@yamaimo.dev"]
 
-  spec.summary       = "Tweet a random line from files."
+  spec.summary       = "Tweet a random content from files."
   spec.homepage      = "https://github.com/yamaimo/randtweet"
   spec.license       = "MIT"
 

@@ -14,8 +14,8 @@ module RandTweet
       access_token:         YOUR_ACCESS_TOKEN
       access_token_secret:  YOUR_ACCESS_SECRET
       files:
-        - {path: filepath1, weight: 20}
-        - {path: filepath2, weight: 10}
+        - {path: filepath1.yml, weight: 20}
+        - {path: filepath2.yml, weight: 10}
     END_OF_TEMPLATE
 
     def self.create_template(dir=nil)
@@ -66,13 +66,13 @@ module RandTweet
       raise "File is not selected."
     end
 
-    lines = selected_path.readlines(chomp: true)
-    lines.delete_if(&:empty?)
-    if lines.empty?
+    contents = YAML.load_file(selected_path)
+    contents.delete_if(&:empty?)
+    if contents.empty?
       raise "File #{selected_path} is empty."
     end
 
-    lines.sample
+    contents.sample
   end
 
   def tweet(config, content)
