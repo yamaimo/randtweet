@@ -4,22 +4,32 @@ require 'randtweet'
 require 'optparse'
 
 USAGE = <<END_OF_USAGE
-randtweet [-i|--init|-h|--help] [<dir>]
+randtweet [-i|--init|-d|--draft|--version|-h|--help] [<dir>]
   -i, --init    Generate config.yml in <dir>.
+  -d, --draft   Only select a content.
+      --version Show version and exit.
   -h, --help    Show this usage and exit.
   (no option)   Tweet a random line according to <dir>/config.yml.
   Default <dir> path is current directory.
 END_OF_USAGE
 
-opts = ARGV.getopts("ih", "init", "help")
+opts = ARGV.getopts("idh", "init", "draft", "version", "help")
 init = opts["i"] || opts["init"]
+draft = opts["d"] || opts["draft"]
+version = opts["version"]
 help = opts["h"] || opts["help"]
 dir = ARGV.empty? ? nil : ARGV[0]
 
+if version
+  STDERR.puts RandTweet::VERSION
+  exit 1
+end
 if help
   STDERR.puts USAGE
   exit 1
 end
+
+tweet = !draft
 
 begin
   if init
@@ -28,8 +38,10 @@ begin
   else
     config = RandTweet::Config.new(dir)
     content = RandTweet.select_content(config)
-    RandTweet.tweet(config, content)
-    puts "Tweeted:"
+    if tweet
+      RandTweet.tweet(config, content)
+      puts "Tweeted:"
+    end
     puts content
   end
 rescue => e
