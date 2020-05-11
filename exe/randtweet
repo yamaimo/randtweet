@@ -9,7 +9,7 @@ randtweet [-i|--init|-d|--draft|--version|-h|--help] [<dir>]
   -d, --draft   Only select a content.
       --version Show version and exit.
   -h, --help    Show this usage and exit.
-  (no option)   Tweet a random line according to <dir>/config.yml.
+  (no option)   Tweet a random content according to <dir>/config.yml.
   Default <dir> path is current directory.
 END_OF_USAGE
 
